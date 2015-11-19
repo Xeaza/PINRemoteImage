@@ -154,7 +154,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
 /**
  Set the maximum BPS to download the lowest quality image in a set.
  @see downloadImageWithURLs:options:progress:completion:
-
+ 
  @param lowQualityBPSThreshold bytes per second maximum. Defaults to 50000.
  @param completion Completion to be called once lowQualityBPSThreshold has been set.
  */
@@ -241,20 +241,23 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
  
  @param url NSURL where the image to download resides.
+ @param NSString given to represent the name to use when saving the downloaded image data locally
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
-- (NSUUID *)downloadImageWithURL:(NSURL *)url completion:(PINRemoteImageManagerImageCompletion)completion;
+- (NSUUID *)downloadImageWithURL:(NSURL *)url localImageName:(NSString *)localImageName completion:(PINRemoteImageManagerImageCompletion)completion;
 
 /**
  Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
  
  @param url NSURL where the image to download resides.
+ @param NSString given to represent the name to use when saving the downloaded image data locally
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
+                  localImageName:(NSString *)localImageName
                          options:(PINRemoteImageManagerDownloadOptions)options
                       completion:(PINRemoteImageManagerImageCompletion)completion;
 
@@ -262,6 +265,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  Download or retrieve from cache the image found at the url. All completions are called on an arbitrary callback queue unless called on the main thread and the result is in the memory cache (this is an optimization to allow synchronous results for the UI when an object is cached in memory).
  
  @param url NSURL where the image to download resides.
+ @param NSString given to represent the name to use when saving the downloaded image data locally
  @param options PINRemoteImageManagerDownloadOptions options with which to fetch the image.
  @param progress PINRemoteImageManagerImageCompletion block which will be called to update progress of the image download.
  @param completion PINRemoteImageManagerImageCompletion block to call when image has been fetched from the cache or downloaded.
@@ -269,6 +273,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
+                  localImageName:(NSString *)localImageName
                          options:(PINRemoteImageManagerDownloadOptions)options
                         progress:(PINRemoteImageManagerImageCompletion)progress
                       completion:(PINRemoteImageManagerImageCompletion)completion;
@@ -285,6 +290,7 @@ typedef void(^PINRemoteImageManagerAuthenticationChallenge)(NSURLSessionTask *ta
  @return An NSUUID which uniquely identifies this request. To be used for canceling requests and verifying that the callback is for the request you expect (see categories for example).
  */
 - (NSUUID *)downloadImageWithURL:(NSURL *)url
+                  localImageName:(NSString *)localImageName
                          options:(PINRemoteImageManagerDownloadOptions)options
                     processorKey:(NSString *)processorKey
                        processor:(PINRemoteImageManagerImageProcessor)processor

@@ -22,24 +22,34 @@
                fromURL:(NSURL *)url
       placeholderImage:(UIImage *)placeholderImage
 {
-    [self setImageOnView:view fromURL:url placeholderImage:placeholderImage completion:nil];
-}
-
-+ (void)setImageOnView:(id <PINRemoteImageCategory>)view
-               fromURL:(NSURL *)url
-            completion:(PINRemoteImageManagerImageCompletion)completion
-{
-    [self setImageOnView:view fromURL:url placeholderImage:nil completion:completion];
+    [self setImageOnView:view fromURL:url placeholderImage:placeholderImage localImageName:nil completion:nil];
 }
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
                fromURL:(NSURL *)url
       placeholderImage:(UIImage *)placeholderImage
+        localImageName:(NSString *)localImageName
+{
+    [self setImageOnView:view fromURL:url placeholderImage:placeholderImage localImageName:localImageName completion:nil];
+}
+
++ (void)setImageOnView:(id <PINRemoteImageCategory>)view
+               fromURL:(NSURL *)url
+            completion:(PINRemoteImageManagerImageCompletion)completion
+{
+    [self setImageOnView:view fromURL:url placeholderImage:nil localImageName:nil completion:completion];
+}
+
++ (void)setImageOnView:(id <PINRemoteImageCategory>)view
+               fromURL:(NSURL *)url
+      placeholderImage:(UIImage *)placeholderImage
+        localImageName:(NSString *)localImageName
             completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [self setImageOnView:view
                 fromURLs:url?@[url]:nil
         placeholderImage:placeholderImage
+          localImageName:localImageName
             processorKey:nil
                processor:nil
               completion:completion];
@@ -66,6 +76,7 @@
     [self setImageOnView:view
                 fromURLs:url?@[url]:nil
         placeholderImage:placeholderImage
+          localImageName:nil
             processorKey:processorKey
                processor:processor
               completion:nil];
@@ -80,6 +91,7 @@
     [self setImageOnView:view
                 fromURLs:url?@[url]:nil
         placeholderImage:nil
+          localImageName:nil
             processorKey:processorKey
                processor:processor
               completion:completion];
@@ -111,6 +123,7 @@
     return [self setImageOnView:view
                        fromURLs:urls
                placeholderImage:placeholderImage
+                 localImageName:nil
                    processorKey:nil
                       processor:nil
                      completion:completion];
@@ -147,6 +160,7 @@
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
               fromURLs:(NSArray *)urls
       placeholderImage:(UIImage *)placeholderImage
+        localImageName:(NSString *)localImageName
           processorKey:(NSString *)processorKey
              processor:(PINRemoteImageManagerImageProcessor)processor
             completion:(PINRemoteImageManagerImageCompletion)completion
@@ -156,6 +170,7 @@
             [self setImageOnView:view
                         fromURLs:urls
                 placeholderImage:placeholderImage
+                  localImageName:localImageName
                     processorKey:processorKey
                        processor:processor
                       completion:completion];
@@ -164,7 +179,7 @@
     }
     
     [self cancelImageDownloadOnView:view];
-  
+    
     if (placeholderImage) {
         [view pin_setPlaceholderWithImage:placeholderImage];
     }
@@ -204,9 +219,9 @@
                         [view pin_updateUIWithRemoteImageManagerResult:result];
                     }
                     else {
-                        [view pin_updateUIWithImage:result.image animatedImage:nil];                        
+                        [view pin_updateUIWithImage:result.image animatedImage:nil];
                     }
-
+                    
                 }
             };
             if ([NSThread isMainThread]) {
@@ -263,12 +278,14 @@
                                                                                             completion:internalCompletion];
     } else if (processorKey.length > 0 && processor) {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:urls[0]
+                                                                                       localImageName:localImageName
                                                                                               options:options
                                                                                          processorKey:processorKey
                                                                                             processor:processor
                                                                                            completion:internalCompletion];
     } else {
         downloadImageOperationUUID = [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:urls[0]
+                                                                                       localImageName:localImageName
                                                                                               options:options
                                                                                              progress:internalProgress
                                                                                            completion:internalCompletion];

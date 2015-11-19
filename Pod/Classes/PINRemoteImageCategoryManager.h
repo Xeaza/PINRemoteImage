@@ -28,6 +28,12 @@
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
                fromURL:(NSURL *)url
       placeholderImage:(UIImage *)placeholderImage
+        localImageName:(NSString *)localImageName;
+
++ (void)setImageOnView:(id <PINRemoteImageCategory>)view
+               fromURL:(NSURL *)url
+      placeholderImage:(UIImage *)placeholderImage
+        localImageName:(NSString *)localImageName
             completion:(PINRemoteImageManagerImageCompletion)completion;
 
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
@@ -54,6 +60,7 @@
 + (void)setImageOnView:(id <PINRemoteImageCategory>)view
               fromURLs:(NSArray *)urls
       placeholderImage:(UIImage *)placeholderImage
+        localImageName:(NSString *)localImageName
           processorKey:(NSString *)processorKey
              processor:(PINRemoteImageManagerImageProcessor)processor
             completion:(PINRemoteImageManagerImageCompletion)completion;
@@ -103,6 +110,15 @@
  @param placeholderImage UIImage to set on the view while the image at URL is being retrieved.
  */
 - (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage;
+
+/**
+ Set the image from the given URL and set placeholder image while image at URL is being retrieved.
+ 
+ @param url NSURL to fetch from.
+ @param placeholderImage UIImage to set on the view while the image at URL is being retrieved.
+ @param localImageName NSString that will represent the name of the image to be saved. Requires .png or .jpeg respectively depending on the image type
+ */
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage localImageName:(NSString *)localImageName;
 
 /**
  Set the image from the given URL and call completion when finished.
@@ -159,7 +175,7 @@
  @param processor PINRemoteImageManagerImageProcessor processor block which should return the processed image.
  @param completion Called when url has been retrieved and set on view.
  */
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion;
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage localImageName:(NSString *)localImageName processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion;
 
 /**
  Retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.
@@ -237,14 +253,14 @@
 
 /**
  Set the image from the given URL.
-
+ 
  @param url NSURL to fetch from.
  */
 - (void)setImageFromURL:(NSURL *)url __attribute((deprecated("use pin_setImageFromURL:")));
 
 /**
  Set the image from the given URL and set placeholder image while image at URL is being retrieved.
-
+ 
  @param url NSURL to fetch from.
  @param placeholderImage UIImage to set on the view while the image at URL is being retrieved.
  */
@@ -252,7 +268,7 @@
 
 /**
  Set the image from the given URL and call completion when finished.
-
+ 
  @param url NSURL to fetch from.
  @param completion Called when url has been retrieved and set on view.
  */
@@ -260,7 +276,7 @@
 
 /**
  Set the image from the given URL, set placeholder while image at url is being retrieved and call completion when finished.
-
+ 
  @param url NSURL to fetch from.
  @param placeholderImage UIImage to set on the view while the image at URL is being retrieved.
  @param completion Called when url has been retrieved and set on view.
@@ -269,7 +285,7 @@
 
 /**
  Retrieve the image from the given URL, process it using the passed in processor block and set result on view.
-
+ 
  @param url NSURL to fetch from.
  @param processorKey NSString key to uniquely identify processor. Used in caching.
  @param processor PINRemoteImageManagerImageProcessor processor block which should return the processed image.
@@ -278,17 +294,17 @@
 
 /**
  Set placeholder on view and retrieve the image from the given URL, process it using the passed in processor block and set result on view.
-
+ 
  @param url NSURL to fetch from.
  @param placeholderImage UIImage to set on the view while the image at URL is being retrieved.
  @param processorKey NSString key to uniquely identify processor. Used in caching.
  @param processor PINRemoteImageManagerImageProcessor processor block which should return the processed image.
  */
-- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor __attribute((deprecated("use pin_setImageFromURL:placeholderImage:processorKey:processor:")));
+- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage localImageName:(NSString *)localImageName processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor __attribute((deprecated("use pin_setImageFromURL:placeholderImage:processorKey:processor:")));
 
 /**
  Retrieve the image from the given URL, process it using the passed in processor block and set result on view. Call completion after image has been fetched, processed and set on view.
-
+ 
  @param url NSURL to fetch from.
  @param processorKey NSString key to uniquely identify processor. Used in caching.
  @param processor PINRemoteImageManagerImageProcessor processor block which should return the processed image.
@@ -298,25 +314,25 @@
 
 /**
  Set placeholder on view and retrieve the image from the given URL, process it using the passed in processor block and set result on view. Call completion after image has been fetched, processed and set on view.
-
+ 
  @param url NSURL to fetch from.
  @param placeholderImage UIImage to set on the view while the image at URL is being retrieved.
  @param processorKey NSString key to uniquely identify processor. Used in caching.
  @param processor PINRemoteImageManagerImageProcessor processor block which should return the processed image.
  @param completion Called when url has been retrieved and set on view.
  */
-- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion __attribute((deprecated("use pin_completion:")));
+- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage localImageName:(NSString *)localImageName processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion __attribute((deprecated("use pin_completion:")));
 
 /**
  Retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.
-
+ 
  @param urls NSArray of NSURLs sorted in increasing quality
  */
 - (void)setImageFromURLs:(NSArray *)urls __attribute((deprecated("use pin_setImageFromURLs:")));
 
 /**
  Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view.
-
+ 
  @param urls NSArray of NSURLs sorted in increasing quality
  @param placeholderImage UIImage to set on the view while the image at URL is being retrieved.
  */
@@ -324,7 +340,7 @@
 
 /**
  Set placeholder on view and retrieve one of the images at the passed in URLs depending on previous network performance and set result on view. Call completion after image has been fetched and set on view.
-
+ 
  @param urls NSArray of NSURLs sorted in increasing quality
  @param placeholderImage UIImage to set on the view while the image at URL is being retrieved.
  @param completion Called when url has been retrieved and set on view.
@@ -338,21 +354,21 @@
 
 /**
  Returns the NSUUID associated with any PINRemoteImage task currently running on the view.
-
+ 
  @return NSUUID associated with any PINRemoteImage task currently running on the view.
  */
 - (NSUUID *)downloadImageOperationUUID __attribute((deprecated("use pin_downloadImageOperationUUID")));
 
 /**
  Set the current NSUUID associated with a PINRemoteImage task running on the view.
-
+ 
  @param downloadImageOperationUUID NSUUID associated with a PINRemoteImage task.
  */
 - (void)setDownloadImageOperationUUID:(NSUUID *)downloadImageOperationUUID __attribute((deprecated("use pin_setDownloadImageOperationUUID:")));
 
 /**
  Whether the view should update with progress images (such as those provided by progressive JPEG images).
-
+ 
  @return BOOL value indicating whether the view should update with progress images
  */
 @property (nonatomic, assign) BOOL updateWithProgress __attribute((deprecated("use pin_@property (nonatomic, assign) BOOL updateWithProgress")));

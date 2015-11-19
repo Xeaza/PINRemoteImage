@@ -21,6 +21,11 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage];
 }
 
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage localImageName:(NSString *)localImageName
+{
+    [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage localImageName:localImageName];
+}
+
 - (void)pin_setImageFromURL:(NSURL *)url completion:(PINRemoteImageManagerImageCompletion)completion
 {
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url completion:completion];
@@ -28,7 +33,7 @@
 
 - (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage completion:(PINRemoteImageManagerImageCompletion)completion
 {
-    [PINRemoteImageCategoryManager setImageOnView:self fromURL:url placeholderImage:placeholderImage completion:completion];
+    [PINRemoteImageCategoryManager setImageOnView:self fromURL:url  placeholderImage:placeholderImage localImageName:nil completion:completion];
 }
 
 - (void)pin_setImageFromURL:(NSURL *)url processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
@@ -46,9 +51,9 @@
     [PINRemoteImageCategoryManager setImageOnView:self fromURL:url processorKey:processorKey processor:processor completion:completion];
 }
 
-- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)pin_setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage localImageName:(NSString *)localImageName processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
 {
-    [PINRemoteImageCategoryManager setImageOnView:self fromURLs:@[url] placeholderImage:placeholderImage processorKey:processorKey processor:processor completion:completion];
+    [PINRemoteImageCategoryManager setImageOnView:self fromURLs:@[url] placeholderImage:placeholderImage localImageName:localImageName processorKey:processorKey processor:processor completion:completion];
 }
 
 - (void)pin_setImageFromURLs:(NSArray *)urls
@@ -148,7 +153,7 @@
     [self pin_setImageFromURL:url processorKey:processorKey processor:processor];
 }
 
-- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
+- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage localImageName:(NSString *)localImageName processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor
 {
     [self pin_setImageFromURL:url placeholderImage:placeholderImage processorKey:processorKey processor:processor];
 }
@@ -158,9 +163,9 @@
     [self pin_setImageFromURL:url processorKey:processorKey processor:processor completion: completion];
 }
 
-- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
+- (void)setImageFromURL:(NSURL *)url placeholderImage:(UIImage *)placeholderImage localImageName:(NSString *)localImageName processorKey:(NSString *)processorKey processor:(PINRemoteImageManagerImageProcessor)processor completion:(PINRemoteImageManagerImageCompletion)completion
 {
-    [self pin_setImageFromURL:url placeholderImage:placeholderImage processorKey:processorKey processor:processor completion:completion];
+    [self pin_setImageFromURL:url placeholderImage:placeholderImage localImageName:localImageName processorKey:processorKey processor:processor completion:completion];
 }
 
 - (void)setImageFromURLs:(NSArray *)urls
