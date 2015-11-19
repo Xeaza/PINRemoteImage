@@ -1301,6 +1301,12 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     return cacheKey;
 }
 
+- (NSURL *)documentsDirectoryURL
+{
+    NSArray *documentsURLS = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+    return [documentsURLS firstObject];
+}
+
 @end
 
 @implementation NSOperationQueue (PINRemoteImageManager)
