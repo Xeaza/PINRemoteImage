@@ -1307,6 +1307,24 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     return [documentsURLS firstObject];
 }
 
+/**
+ Return URL of the directory to save image data. Creates 'Images' directory if it doens't already exist
+ */
+- (NSURL *)imageDirectoryURL
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *imagesDirectoryURL = [[self documentsDirectoryURL] URLByAppendingPathComponent:@"Images" isDirectory:TRUE];
+    NSError *error;
+    
+    if (![fileManager fileExistsAtPath:imagesDirectoryURL.path]) {
+        if (![fileManager createDirectoryAtURL:imagesDirectoryURL withIntermediateDirectories:FALSE attributes:nil error:&error]) {
+            PINLog(@"Failed to create directory at URL: %@ with error: %@", imagesDirectoryURL, error.NSLocalizedDescriptionKey);
+            return [self documentsDirectoryURL];
+        }
+    }
+    return imagesDirectoryURL;
+}
+
 @end
 
 @implementation NSOperationQueue (PINRemoteImageManager)
