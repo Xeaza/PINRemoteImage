@@ -46,13 +46,12 @@
     [self.imageView pin_setImageFromURL:progressiveURL];
     
     NSMutableArray *progress = [[NSMutableArray alloc] init];
-    [[PINRemoteImageManager sharedImageManager]
-     downloadImageWithURL:progressiveURL
-     options:PINRemoteImageManagerDownloadOptionsNone progress:^(PINRemoteImageManagerResult *result) {
-         [progress addObject:result.image];
-     } completion:^(PINRemoteImageManagerResult *result) {
-         [progress addObject:result.image];
-     }];
+    [[PINRemoteImageManager sharedImageManager] downloadImageWithURL:progressiveURL localImageName:@"localImage.png" options:PINRemoteImageManagerDownloadOptionsNone progress:^(PINRemoteImageManagerResult *result) {
+        [progress addObject:result.image];
+    } completion:^(PINRemoteImageManagerResult *result) {
+        [progress addObject:result.image];
+    }];
+
 }
 
 /*
