@@ -891,6 +891,25 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     return dataTaskOperation;
 }
 
+
+#pragma mark - Saving Locally
+
+/**
+ Save image data in directory in app Documents directory.
+ 
+ @param imageData The image data representing the downloaded image.
+ @param imageName  A string representing the name of the image. .png or .jpeg should be included.
+ */
+- (void)saveImageDataLocally:(NSData *)imageData forName:(NSString *)imageName {
+    NSURL *imageDataURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self imageDirectoryURL], imageName]];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:imageDataURL.path]) {
+        if (![imageData writeToURL:imageDataURL atomically:TRUE]) {
+            PINLog(@"Failed to write data to url: %@", imageDataURL);
+        }
+    }
+}
+
 #pragma mark - Prefetching
 
 - (void)prefetchImagesWithURLs:(NSArray *)urls
