@@ -407,6 +407,8 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
     //If so, special case this to avoid flashing the UI
     id object = [self.cache.memoryCache objectForKey:key];
     if (object) {
+        self.imageIsFromCache = YES;
+        
         if ([self earlyReturnWithOptions:options url:url object:object completion:completion]) {
             return nil;
         }
@@ -452,6 +454,7 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
                         {
                             typeof(self) strongSelf = weakSelf;
                             if (object) {
+                                self.imageIsFromCache = YES;
                                 
                                 UIImage *image = nil;
                                 FLAnimatedImage *animatedImage = nil;

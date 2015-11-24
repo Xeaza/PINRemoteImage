@@ -104,13 +104,19 @@
 {
     if (image)
     {
-        [UIView transitionWithView:self
-                          duration:0.3
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                            self.image = image;
-                        }
-                        completion:NULL];
+        if ([[PINRemoteImageManager sharedImageManager] imageIsFromCache]) {
+            
+            self.image = image;
+        } else {
+            
+            [UIView transitionWithView:self
+                              duration:0.3
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                self.image = image;
+                            }
+                            completion:NULL];
+        }
         
         [self setNeedsLayout];
     }
