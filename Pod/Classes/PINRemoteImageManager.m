@@ -905,11 +905,36 @@ typedef void (^PINRemoteImageManagerDataCompletion)(NSData *data, NSError *error
  */
 - (void)saveImageDataLocally:(NSData *)imageData forName:(NSString *)imageName {
     NSURL *imageDataURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self imageDirectoryURL], imageName]];
+    NSString *typeOfImage = [imageName substringFromIndex:imageName.length - 3];
+    NSData *resizedThumbnailData = [self resizeImageFromImageData:imageData imageType:typeOfImage];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:imageDataURL.path]) {
-        if (![imageData writeToURL:imageDataURL atomically:TRUE]) {
+        if (![resizedThumbnailData writeToURL:imageDataURL atomically:TRUE]) {
             PINLog(@"Failed to write data to url: %@", imageDataURL);
         }
+    }
+}
+
+/**
+ Scale image down by half
+ 
+ @param imageData The imageData to be resized. Converted to UIImage, resized by height/2 and width/2
+ @param imageType NSString of PNG or JPEG
+ @returns Resized UIImagePNGRepresentation of imageData
+ */
+- (NSData *)resizeImageFromImageData:(NSData *)imageData imageType:(NSString *)imageType
+{
+    UIImage *image = [UIImage imageWithData:imageData];
+    CGSize smallSize = CGSizeMake(image.size.width / 2, image.size.height / 2);
+    UIGraphicsBeginImageContextWithOptions(smallSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, smallSize.width, smallSize.height)];
+    UIImage *thumbnail = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    if ([imageType.lowercaseString isEqualToString:@"png"]) {
+        return UIImagePNGRepresentation(thumbnail);
+    } else {
+        return UIImageJPEGRepresentation(thumbnail, 1.0);
     }
 }
 
